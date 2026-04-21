@@ -532,7 +532,7 @@
   }, { passive: true });
 
   // Quote form submission
-  async function submitQuote() {
+async function submitQuote() {
     var name = document.getElementById('f-fname').value.trim();
     var email = document.getElementById('f-email').value.trim();
     if (!name || !email) {
@@ -540,6 +540,8 @@
       return;
     }
     var data = new FormData();
+    data.append('access_key', '9f6748b9-6c9b-4363-9c2c-b2e089e572f0');
+    data.append('subject', 'New Disney Vacation Quote Request');
     data.append('name', name + ' ' + document.getElementById('f-lname').value.trim());
     data.append('email', email);
     data.append('phone', document.getElementById('f-phone').value);
@@ -550,12 +552,12 @@
     data.append('special', document.getElementById('f-special').value);
     data.append('contact', document.getElementById('f-contact').value);
     try {
-      var response = await fetch('https://formspree.io/f/xojykekv', {
+      var response = await fetch('https://api.web3forms.com/submit', {
         method: 'POST',
-        body: data,
-        headers: { 'Accept': 'application/json' }
+        body: data
       });
-      if (response.ok) {
+      var result = await response.json();
+      if (result.success) {
         document.getElementById('quote-form-wrap').style.display = 'none';
         var success = document.getElementById('form-success');
         success.style.display = 'block';
@@ -563,7 +565,7 @@
       } else {
         alert('Something went wrong. Please try again!');
       }
-    } catch (error) {
+    } catch(e) {
       alert('Something went wrong. Please try again!');
     }
   }
