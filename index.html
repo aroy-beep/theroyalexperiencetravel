@@ -532,13 +532,29 @@
   }, { passive: true });
 
   // Quote form submission
-  function submitQuote() {
+  async function submitQuote() {
     var name = document.getElementById('f-fname').value.trim();
     var email = document.getElementById('f-email').value.trim();
     if (!name || !email) {
       alert('Please enter at least your first name and email address so I can reach you!');
       return;
     }
+    var data = {
+      name: name + ' ' + document.getElementById('f-lname').value.trim(),
+      email: email,
+      phone: document.getElementById('f-phone').value,
+      dates: document.getElementById('f-dates').value,
+      travelers: document.getElementById('f-travelers').value,
+      resort: document.getElementById('f-resort').value,
+      budget: document.getElementById('f-budget').value,
+      special: document.getElementById('f-special').value,
+      contact: document.getElementById('f-contact').value
+    };
+    await fetch('https://formspree.io/f/xojykekv', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
     document.getElementById('quote-form-wrap').style.display = 'none';
     var success = document.getElementById('form-success');
     success.style.display = 'block';
